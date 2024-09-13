@@ -1,0 +1,197 @@
+@charset "utf-8";
+@use "../base/mixins" as *;
+
+/** @source Article preview */
+@mixin stretched-grid-cell {
+    grid-row: 1 / -1;
+    align-self: center;
+}
+.article-preview {
+    font-size: var(--article-text-size);
+    line-height: calc(2 / var(--article-text-size-unitless));
+    letter-spacing: var(--article-text-letter-spacing);
+    font-weight: 500;
+    color: var(--primary);
+    background: var(--secondary-background);
+    box-sizing: border-box;
+    max-inline-size: var(--article-size);
+    padding: var(--article-block-padding-start) var(--article-inline-padding) var(--article-block-padding-end);
+    border-radius: var(--article-radius);
+    box-shadow: var(--article-shadow);
+    overflow: hidden;
+    footer {
+        p {
+            display: grid;
+            grid-template: repeat(2, auto) / var(--article-avatar-size) 1fr;
+            gap: 0 1.6rem;
+            margin-block-end: var(--article-share-block-padding);
+        }
+        img {
+            @include stretched-grid-cell;
+            border-radius: 50%;
+        }
+    }
+    > p {
+        margin-block: 1.2rem 3.2rem;
+    }
+    picture {
+        display: block;
+        margin-inline: calc(var(--article-inline-padding) * -1);
+    }
+    time {
+        color: var(--tertiary);
+    }
+    .sr-only {
+        @include css-visually-hidden;
+    }
+    .title {
+        font-size: var(--article-title-size);
+        line-height: 1.5;
+        letter-spacing: var(--article-title-letter-spacing);
+        color: var(--secondary);
+        margin-block-start: 3.6rem;
+    }
+    .author {
+        font-weight: bold;
+    }
+    .share {
+        background: var(--tertiary-background);
+        display: flex;
+        gap: 2.1rem;
+        align-items: center;
+        padding: var(--article-share-block-padding) var(--article-inline-padding);
+        margin: 0 calc(var(--article-inline-padding) * -1) calc(var(--article-block-padding-end) * -1);
+        ul {
+            list-style: none;
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.6rem;
+        }
+        svg {
+            vertical-align: middle;
+        }
+        path {
+            fill: var(--secondary-background);
+        }
+        &-title {
+            font-size: inherit;
+            font-weight: inherit;
+            letter-spacing: var(--article-share-letter-spacing);
+            color: var(--tertiary);
+            text-transform: uppercase;
+        }
+    }
+    @media (scripting: enabled) {
+        position: relative;
+        footer {
+            p {
+                grid-template-columns: var(--article-avatar-size) 1fr var(--article-button-size);
+                margin-block-end: initial;
+            }
+        }
+        button {
+            @include stretched-grid-cell;
+            background: var(--quaternary-background);
+            grid-column-end: -1;
+            width: 3.2rem;
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            path {
+                fill: var(--quaternary);
+            }
+            &.active {
+                background: var(--quaternary-background-active);
+                transform: translateY(.8rem);
+                path {
+                    fill: var(--quaternary-active);
+                }
+            }
+        }
+        .share {
+            margin: initial;
+            position: absolute;
+            inset-block-end: 0;
+            inset-inline: 0;
+            &.hidden {
+                display: none;
+            }
+            ul {
+                margin-inline-end: var(--article-inline-padding);
+            }
+        }
+    }
+    @include css-media-queries($from-breakpoint: row-component-article) {
+        --article-size: 73rem;
+        --article-block-padding-start: 3.2rem;
+        --article-block-padding-end: 3.2rem;
+        --article-inline-padding: 4rem;
+        padding-inline-start: var(--article-inline-padding-start);
+        position: relative;
+        > p {
+            margin-block-end: 2rem;
+        }
+        picture {
+            margin-inline: initial;
+            position: absolute;
+            inset-block: 0;
+            inset-inline-start: 0;
+        }
+        .title {
+            --article-title-size: 2rem;
+            --article-title-letter-spacing: calc(.025em / 2);
+            line-height: calc(28 / 20);
+            margin-block-start: initial;
+        }
+        @include css-media-queries($other-media-features: "(scripting: enabled)") {
+            button {
+                &.active {
+                    transform: translateY(1.9rem);
+                }
+            }
+            .share {
+                inset-inline-start: calc(var(--article-inline-padding-start) - var(--article-inline-padding));
+            }
+        }
+    }
+    @include css-media-queries($from-breakpoint: tooltip-share, $other-media-features: "(scripting: enabled)") {
+        overflow: initial;
+        picture img {
+            border-radius: var(--article-radius) 0 0 var(--article-radius);
+        }
+        button {
+            &.active {
+                transform: initial;
+            }
+        }
+        .share {
+            padding: 1.8rem 3.6rem;
+            border-radius: var(--article-radius);
+            box-shadow: var(--article-share-shadow);
+            inset-block-end: 9.6rem;
+            inset-inline: auto -6.8rem;
+            &::before {
+                background: inherit;
+                width: 2.4rem;
+                aspect-ratio: 2 / 1;
+                transform: translateX(-50%);
+                clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+                position: absolute;
+                inset-block-end: -1.2rem;
+                inset-inline-start: 50%;
+                content: "";
+            }
+            ul {
+                margin-inline-end: initial;
+            }
+        }
+    }
+    @include css-media-queries($below-breakpoint: tooltip-share, $other-media-features: "(scripting: enabled)") {
+        button {
+            transition: transform 200ms ease-in;
+        }
+    }
+}

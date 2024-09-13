@@ -1,0 +1,31 @@
+@charset "utf-8";
+@use "../base/mixins" as *;
+
+/** @section General layout */
+body {
+    font-family: var(--font);
+    font-weight: 500;
+    background: var(--primary-background);
+}
+main {
+    padding: var(--overall-spacing);
+    display: grid;
+    place-items: center;
+}
+.attribution {
+    font-size: 1.1rem;
+    text-align: center;
+    a {
+        color: inherit;
+    }
+}
+@include css-media-queries($from-breakpoint: row-component-article) {
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+    }
+    main {
+        flex: 1;
+    }
+}
