@@ -16,11 +16,22 @@ for (const articleComponent of articleComponents) {
             path.setAttribute("d", "M15 6.49504L8.76629 0.013916V3.88067H7.44095C3.33138 3.88067 0 7.03931 0 10.9358V12.9849L0.588684 12.3733C2.59014 10.2941 5.4221 9.1094 8.39115 9.1094H8.76629V12.9762L15 6.49504Z");
             svg.appendChild(path);
             const button = document.createElement("button");
+            const buttonText = "Share";
+            const buttonTextActive = "Close";
+            const span = document.createElement("span");
+            span.className = "sr-only";
+            span.textContent = buttonText;
+            button.appendChild(span);
+            button.title = buttonText;
             footerP.appendChild(button);
             button.appendChild(svg);
             button.type = "button";
             button.addEventListener("click", function () {
+                const { title } = this;
+                const { textContent } = span;
                 this.classList.toggle("active");
+                this.title = (title === buttonText) ? buttonTextActive : buttonText;
+                span.textContent = (textContent === buttonText) ? buttonTextActive : buttonText;
                 share.classList.toggle("hidden");
             });
         }
